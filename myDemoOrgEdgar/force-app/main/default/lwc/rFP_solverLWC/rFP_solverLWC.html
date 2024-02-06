@@ -1,0 +1,35 @@
+<!--
+  @description       :
+  @author            : edgar.lopez@salesforce.com
+  @group             :
+  @last modified on  : 02-01-2024
+  @last modified by  : edgar.lopez@salesforce.com
+-->
+<!-- Inside the LWC HTML file -->
+<template>
+    <lightning-card title="RFP Solver">
+        <div class="slds-m-around_medium">
+            <lightning-input type="file" accept=".csv" label="Upload CSV" onchange={handleFileChange}></lightning-input>
+        </div>
+
+        <div class="slds-m-top_medium">
+            <p>{uploadMessage}</p>
+        </div>
+
+        <div class="slds-m-around_medium">
+            <lightning-button label="Generate Table" onclick={generateAndCopyTable} variant="brand"></lightning-button>
+            <lightning-button label="Copy Answers" variant="brand" onclick={copyAnswers}></lightning-button>
+        </div>
+
+        <lightning-card title="Answers Table">
+            <div class="slds-m-around_medium">
+                <lightning-datatable
+                    key-field="id"
+                    data={data}
+                    columns={columns}
+                    hide-checkbox-column
+                ></lightning-datatable>
+            </div>
+        </lightning-card>
+    </lightning-card>
+</template>
