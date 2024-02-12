@@ -1,0 +1,80 @@
+<!--
+  @description       :
+  @author            : edgar.lopez@salesforce.com
+  @group             :
+  @last modified on  : 02-12-2024
+  @last modified by  : edgar.lopez@salesforce.com
+-->
+<template>
+    <div class="picklist-container">
+        <lightning-combobox
+            class="select-text"
+            name="hospitalSelection"
+            value={selectedHospital}
+            options={hospitalOptions}
+        ></lightning-combobox>
+    </div>
+    <lightning-card title="Legendas">
+        <div class="legend-container">
+            <p class="legend-item"><span class="legend-color available-square "></span> Livre</p>
+            <p class="legend-item"><span class="legend-color occupied-square "></span> Ocupado</p>
+            <p class="legend-item"><span class="legend-color maintenance-square "></span> Em Manutenção</p>
+            <p class="legend-item"><span class="legend-color cleaning-square "></span> Em Higienização</p>
+            <p class="legend-item"><span class="legend-color reserved-square "></span> Em Revisão</p>
+            <p class="legend-item">
+                <span class="legend-color new-icon-square">
+                    <img src={Berço} alt="New Icon 1" class="legend-icon" />
+                </span> Berço
+            </p>
+            <p class="legend-item">
+                <span class="legend-color new-icon-square">
+                    <img src={Cama} alt="New Icon 2" class="legend-icon" />
+                </span> Cama
+            </p>
+            <p class="legend-item">
+                <span class="legend-color new-icon-square">
+                    <img src={Reservado} alt="New Icon 3" class="legend-icon" />
+                </span> Reservado
+            </p>
+        </div>
+        <!-- Display floors side by side -->
+        <template if:true={hospitalData.data}>
+            <div class="floor-container">
+                <template for:each={hospitalData.data.floors} for:item="floor">
+                    <div key={floor.andar.Id} class="floor-item">
+                        <p class="floor-title">{floor.andar.Name}</p>
+                        <!-- Display rooms within each floor -->
+                        <ul class="room-list">
+                            <template for:each={floor.rooms} for:item="room">
+                                <li key={room.quarto.Id} class="room-item">
+                                    <div class="room-card">
+                                        <p class="room-title">{room.quarto.Name}</p>
+                                        <!-- Display beds within each room in two columns -->
+                                        <div class="bed-container">
+                                            <template for:each={room.beds} for:item="bed">
+                                                <div key={bed.Id} class="bed-item">
+                                                    <div class={bedClass} onclick={handleOpenLeitoRecord}  data-bed-id={bed.leito.Id}>
+                                                        <img src={iconSRC1}/>
+                                                        <img src={iconSRC2}/>
+                                                        <p class="bed-title">{bed.leito.Name}</p>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+                </template>
+            </div>
+        </template>
+        <!-- Handle loading and error states -->
+        <template if:true={hospitalData.error}>
+            {hospitalData.error.body.message}
+        </template>
+        <template if:true={hospitalData.loading}>
+            Loading...
+        </template>
+    </lightning-card>
+</template>
